@@ -3,7 +3,7 @@
 A Docker base image for [`naftulikay/joop`][joop], providing a Jupyter execution environment with support for:
 
  - Python 3.7
- - [Rust][rust] (via [`evcxr`][evxcr])
+ - [Rust][rust] (via [`evcxr`][evcxr])
 
 ## License
 
