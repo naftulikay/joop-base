@@ -4,7 +4,7 @@ MAINTAINER Naftuli Kay <me@naftuli.wtf>
 
 ENV JUPYTER_USER=jupyter
 ENV HOME=/home/${JUPYTER_USER}
-ENV PATH=$HOME/.cargo/bin:$HOME/.pyenv/shims:$HOME/.pyenv/bin:$HOME/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+ENV PATH=$HOME/.cargo/bin:$HOME/.rbenv/shims:$HOME/.rbenv/bin:$HOME/.pyenv/shims:$HOME/.pyenv/bin:$HOME/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 # create user
 RUN useradd -m ${JUPYTER_USER}
@@ -28,6 +28,14 @@ RUN curl -sSL ${PYENV_INSTALLER_URL} | sudo -Hu ${JUPYTER_USER} bash -ls - -y &&
   sudo -Hiu ${JUPYTER_USER} pyenv install ${PYTHON_VERSION} && \
   sudo -Hiu ${JUPYTER_USER} pyenv global ${PYTHON_VERSION}
 
+# Install Ruby
+ENV RUBY_VERSION=2.7.0
+ENV RBENV_INSTALLER_URL=https://github.com/rbenv/rbenv-installer/raw/master/bin/rbenv-installer
+
+RUN curl -sSL ${RBENV_INSTALLER_URL} | sudo -Hu ${JUPYTER_USER} bash -ls - -y && \
+  sudo -Hiu ${JUPYTER_USER} rbenv install ${RUBY_VERSION} && \
+  sudo -Hiu ${JUPYTER_USER} rbenv global ${RUBY_VERSION}
+
 # Install Rust
 ENV RUST_TOOLCHAIN=stable
 ENV RUSTUP_INSTALLER_URL=https://sh.rustup.rs
@@ -49,5 +57,10 @@ EXPOSE 8888
 ADD --chown=jupyter:jupyter requirements.txt $HOME/requirements.txt
 RUN pip install --user -r $HOME/requirements.txt && rm $HOME/requirements.txt
 
-# install rust evaluation context for jupyter
+# install ruby kernel for jupyter, and any packages
+ADD --chown=jupyter:jupyter Gemfile $HOME/Gemfile
+RUN gem install ffi-rzmq && gem install --pre iruby && iruby register --force
+RUN bundle install && rm $HOME/Gemfile
+
+# install rust kernel for jupyter
 RUN cargo install evcxr_jupyter && evcxr_jupyter --install

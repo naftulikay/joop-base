@@ -3,7 +3,8 @@
 A Docker base image for [`naftulikay/joop`][joop], providing a Jupyter execution environment with support for:
 
  - Python 3.7
- - [Rust][rust] (via [`evcxr`][evcxr])
+ - [Ruby][ruby] 2.7.0 (via [`iruby`][iruby])
+ - [Rust][rust] `stable` (via [`evcxr`][evcxr])
 
 ## License
 
@@ -13,9 +14,11 @@ Licensed at your discretion under either:
  - [Apache License, Version 2.0](./LICENSE-APACHE)
 
  [docker]: https://hub.docker.com/r/naftulikay/joop-base/
- [docker.svg]: https://img.shields.io/docker/build/naftulikay/joop-base.svg
+ [docker.svg]: https://img.shields.io/docker/cloud/build/naftulikay/joop-base
  [evcxr]: https://github.com/google/evcxr
+ [iruby]: https://github.com/SciRuby/iruby
  [joop]: https://github.com/naftulikay/joop
+ [ruby]: https://www.ruby-lang.org/en/
  [rust]: https://rust-lang.org
  [travis]: https://travis-ci.org/naftulikay/joop-base
  [travis.svg]: https://travis-ci.org/naftulikay/joop-base.svg?branch=master
